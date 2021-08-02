@@ -1,9 +1,16 @@
-package unittest;
+  package unittest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+class UserDBWithSuccess extends UserDB {
+    @Override
+    public String getNameById(int id) {
+        return "somkiat";
+    }
+}
 
 class HelloTest {
 
@@ -11,12 +18,29 @@ class HelloTest {
     @DisplayName("ทำการทดสอบกับ database (I = Isolate/Independent)")
     public void case02() {
         Hello hello = new Hello();
+        hello.userDB = new UserDBWithSuccess();
         String name = hello.workWithDb(1);
         assertEquals("somkiat", name);
     }
 
     @Test
-    @DisplayName("นี่คือ case แรกของการเขียนนะ")
+    @DisplayName("เกิด exception เมื่อค้นหาผู้ใช้งาน id=2 ไม่เจอ")
+    public void case03() {
+        Hello hello = new Hello();
+        hello.userDB = new UserDB(){
+            @Override
+            public String getNameById(int id){
+                throw new UserNotFoundException("Id=" + id + " not found");
+            }
+        };
+        // Junit 5 + Exception
+        Exception exception = assertThrows(UserNotFoundException.class, () ->
+                hello.workWithDb(2));
+        assertEquals("Id=2 not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("นี่คือ case แรกของการเขียน")
     public void case01() {
         // Arrange == Given == Pre condition
         Hello hello = new Hello();
