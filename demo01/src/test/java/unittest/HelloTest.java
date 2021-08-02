@@ -36,7 +36,7 @@ class HelloTest {
     }
 
     @Test
-    @DisplayName("กรณี exception เมื่อหาผู้ใช้งาน Id=2 ไม่เจอ")
+    @DisplayName("เกิด exception เมื่อหาผู้ใช้งาน Id=2 ไม่เจอ")
     public void case03() {
         Hello hello = new Hello();
         hello.userDB = new UserDB(){
