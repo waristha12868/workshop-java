@@ -8,45 +8,46 @@ import static org.junit.jupiter.api.Assertions.*;
 class HelloTest {
 
     @Test
-    @DisplayName("case-demo01")
+    @DisplayName("นี่คือ case แรกของการเขียน")
     public void case01() {
-        // Arrange
+        // Arrange == Given == Pre Condition
         Hello hello = new Hello();
-        // Act
-        String actualResult = hello.hi("waristha");
-        // Assert
-        assertEquals("Hello, waristha", actualResult);
+        // Act == When == Action == Call target method
+        String actualresult = hello.hi("waristha");
+        // Assert == Validate with expected result
+        assertEquals("Hello waristha", actualresult);
     }
 
     @Test
-    @DisplayName("case-demo02 : ทดสอบ database")
+    @DisplayName("ทำการทดสอบกับ database  success(I = Isolate/Independent)")
     public void case02() {
-        // Arrange
         Hello hello = new Hello();
-        hello.userDB = new UserDB() {
-            @Override
-            public String getNameById(int id) {
-                return "waristha";
-            }
-        };
-        // Act
-        String name = hello.workWithDb(1);
-        // Assert
+        hello.userDB = new UserDBSuccess();
+        String name = hello.workWithDB(1);
         assertEquals("waristha", name);
     }
 
     @Test
-    @DisplayName("เกิด exception เมื่อหาผู้ใช้งาน Id=2 ไม่เจอ")
+    @DisplayName("ทำการทดสอบกับ database fail(I = Isolate/Independent)")
     public void case03() {
         Hello hello = new Hello();
-        hello.userDB = new UserDB(){
-            @Override
-            public String getNameById(int id){
-                throw new UserNotFoundException("Id=" + id + " Not found");
-            }
-        };
+        hello.userDB = new UserDBFail();
         Exception exception = assertThrows(UserNotFoundException.class, () ->
-                hello.workWithDb(2));
-        assertEquals("Id=2 Not found", exception.getMessage());
+                hello.workWithDB(2));
+        assertEquals("Id=2 not found", exception.getMessage());
+    }
+}
+
+class UserDBSuccess extends UserDB {
+    @Override
+    public String getNameById(int id) {
+        return "waristha";
+    }
+}
+
+class UserDBFail extends UserDB {
+    @Override
+    public String getNameById(int id) {
+        throw new UserNotFoundException("Id=" + id + " not found");
     }
 }
