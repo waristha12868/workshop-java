@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserDBWithSuccess extends UserDB {
     @Override
     public String getNameById(int id) {
-        return "somkiat";
+        return "waristha";
     }
 }
 
@@ -20,7 +20,7 @@ class HelloTest {
         Hello hello = new Hello();
         hello.userDB = new UserDBWithSuccess();
         String name = hello.workWithDb(1);
-        assertEquals("somkiat", name);
+        assertEquals("waristha", name);
     }
 
     @Test
